@@ -46,7 +46,6 @@ class ClanFile(object):
             exit(1)
 
         self.line_map = self.parse_file(flattenedlines, breaks)
-        print("and back")
         self.total_time = sum(line.total_time for line in self.line_map if line.is_tier_line)
         self.flat = False
         self.annotated = False

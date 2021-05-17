@@ -142,6 +142,21 @@ def parse_file(self, line_list, breaks):
                     last_line = clan_line
                     continue
 
+                elif line.startswith("@Comment:") or line.startswith("@comment:"):
+                    if line.find('begin skip')>=0:
+                        in_skip_region = True
+                    if line.find('end skip')>=0:
+                        in_skip_region = False
+                    clan_line.in_skip_region = in_skip_region
+                    if line.count("|") > 3:
+                        clan_line.clan_comment = True
+                    else:
+                        clan_line.is_user_comment = True
+                        clan_line.user_comment = elements.UserComment(line)
+                        clan_line.content = line.split("\t", 1)[1].replace(newline_str, "")
+                    if last_line.is_tier_line:
+                        clan_line.tier = last_line.tier
+
                 # clan_line.is_header = True
                 if "@End" in line:
                     clan_line.is_end_header = True
